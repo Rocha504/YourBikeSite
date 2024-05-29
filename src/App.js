@@ -3,8 +3,9 @@ import { Route, Routes, Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import Login from './components/Login';
 import About from './components/About';
+import Login from './components/Login';
+import Register from './components/Register';
 import './styles/App.css';
 
 function Home() {
@@ -97,9 +98,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         {/* Otras rutas aquí */}
       </Routes>
-      <footer className="footer">
+      <footer className="App-footer">
         <div className="footer-border"></div>
         <div className="footer-content">
           {/* Contenido del footer */}
@@ -110,4 +112,3 @@ function App() {
 }
 
 export default App;
-
