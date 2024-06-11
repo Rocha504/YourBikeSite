@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
-import { Route, Routes, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Route, Routes, Link, useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import About from './components/About';
 import Login from './components/Login';
 import Register from './components/Register';
+import AdminDashboard from './components/AdminDashboard';
 import './styles/App.css';
+
+const adminUser = {
+  name: 'Admin',
+  phone: '123456789',
+  username: 'admin@gmail.com',
+  password: 'admin123',
+  role: 'admin',
+};
 
 function Home() {
   const settings = {
@@ -65,9 +74,35 @@ function Home() {
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
+    const adminExists = storedUsers.some(user => user.username === adminUser.username);
+
+    if (!adminExists) {
+      storedUsers.push(adminUser);
+      localStorage.setItem('users', JSON.stringify(storedUsers));
+    }
+
+    const storedUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    if (storedUser) {
+      setIsLoggedIn(true);
+      setCurrentUser(storedUser);
+    }
+  }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setCurrentUser(null);
+    localStorage.removeItem('loggedInUser');
+    navigate('/');
   };
 
   return (
@@ -82,11 +117,18 @@ function App() {
           <Link to="/contacts" onClick={() => setMenuOpen(false)}>Contactos</Link>
           <Link to="/stores" onClick={() => setMenuOpen(false)}>Tiendas</Link>
           <Link to="/equipment" onClick={() => setMenuOpen(false)}>Equipamiento</Link>
+          {isLoggedIn && currentUser.role === 'admin' && (
+            <Link to="/admin" onClick={() => setMenuOpen(false)}>Admin</Link>
+          )}
         </nav>
         <div className="App-header-right">
-          <Link to="/login">
-            <img src="./ISWproyecto/images/login.png" alt="Login" className="login-image" />
-          </Link>
+          {isLoggedIn ? (
+            <button onClick={handleLogout} className="logout-button">Logout</button>
+          ) : (
+            <Link to="/login">
+              <img src="./ISWproyecto/images/login.png" alt="Login" className="login-image" />
+            </Link>
+          )}
         </div>
         <div className="hamburger-menu" onClick={toggleMenu}>
           <div className="bar"></div>
@@ -97,16 +139,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setCurrentUser={setCurrentUser} />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/admin" element={isLoggedIn && currentUser.role === 'admin' ? <AdminDashboard /> : <Home />} />
         {/* Otras rutas aquí */}
       </Routes>
-      <footer className="App-footer">
-        <div className="footer-border"></div>
-        <div className="footer-content">
-          {/* Contenido del footer */}
-        </div>
-      </footer>
     </div>
   );
 }

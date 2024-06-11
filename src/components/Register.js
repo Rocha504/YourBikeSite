@@ -1,3 +1,4 @@
+// src/components/Register.js
 import React, { useState } from 'react';
 import '../styles/register.css';
 
@@ -13,30 +14,29 @@ const Register = () => {
         if (password !== confirmPassword) {
             alert("Las contraseñas no coinciden!");
             return;
-        }else{
-            const newUser = {
-                name: name,
-                phone: phone,
-                username: username,
-                password: password
-            };
-    
-            // Guardar el usuario en localStorage
-            localStorage.setItem('user', JSON.stringify(newUser));
-    
-            alert("Usuario creado exitósamente");
         }
-        console.log('Username:', username);
-        console.log('Password:', password);
+
+        const newUser = {
+            name: name,
+            phone: phone,
+            username: username,
+            password: password,
+            role: 'customer', // Por defecto, los nuevos usuarios son clientes
+        };
+
+        const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
+        storedUsers.push(newUser);
+        localStorage.setItem('users', JSON.stringify(storedUsers));
+
+        alert("Usuario creado exitósamente");
     };
 
-    // Nombre completo, email, usuario, contraseña, num telefono, num rtn, marca bici, modelo bici, estilo bici
     return (
         <div className="register-container">
             <h2>Registro</h2>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label htmlFor="username">Nombre Completo:</label>
+                    <label htmlFor="name">Nombre Completo:</label>
                     <input
                         type="text"
                         id="name"
@@ -45,7 +45,7 @@ const Register = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="username">Número Telefónico:</label>
+                    <label htmlFor="phone">Número Telefónico:</label>
                     <input
                         type="text"
                         id="phone"

@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
 import '../styles/login.css';
+import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ setIsLoggedIn, setCurrentUser }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log('Username:', username);
-        console.log('Password:', password);
-        
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            const parsedUser = JSON.parse(storedUser);
-            if (parsedUser.username === username && parsedUser.password === password) {
-                alert('Inicio de sesión exitoso!');
-                // Aquí podrías redirigir al usuario a otra página o realizar otras acciones necesarias
-            } else {
-                alert('Credenciales incorrectas');
-            }
+
+        const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
+        const user = storedUsers.find(user => user.username === username && user.password === password);
+
+        if (user) {
+            setIsLoggedIn(true);
+            setCurrentUser(user);
+            localStorage.setItem('loggedInUser', JSON.stringify(user));
+            alert('Inicio de sesión exitoso!');
+            navigate('/');
         } else {
-            alert('Usuario no encontrado');
+            alert('Credenciales incorrectas');
         }
     };
 
@@ -56,4 +56,3 @@ const Login = () => {
 };
 
 export default Login;
-
