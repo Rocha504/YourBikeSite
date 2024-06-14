@@ -18,7 +18,13 @@ const Login = ({ setIsLoggedIn, setCurrentUser }) => {
             setCurrentUser(user);
             localStorage.setItem('loggedInUser', JSON.stringify(user));
             alert('Inicio de sesión exitoso!');
-            navigate('/');
+            if (user.role === 'admin') {
+                navigate('/admin');
+            } else if (user.role === 'customer') {
+                navigate('/customer-appointments');
+            } else {
+                navigate('/');
+            }
         } else {
             alert('Credenciales incorrectas');
         }

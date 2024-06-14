@@ -7,6 +7,7 @@ import About from './components/About';
 import Login from './components/Login';
 import Register from './components/Register';
 import AdminDashboard from './components/AdminDashboard';
+import CustomerAppointments from './components/CustomerAppointments';
 import './styles/App.css';
 
 const adminUser = {
@@ -118,7 +119,12 @@ function App() {
           <Link to="/stores" onClick={() => setMenuOpen(false)}>Tiendas</Link>
           <Link to="/equipment" onClick={() => setMenuOpen(false)}>Equipamiento</Link>
           {isLoggedIn && currentUser.role === 'admin' && (
-            <Link to="/admin" onClick={() => setMenuOpen(false)}>Admin</Link>
+            <>
+              <Link to="/admin" onClick={() => setMenuOpen(false)}>Panel de Administracion</Link>
+            </>
+          )}
+          {isLoggedIn && currentUser.role === 'customer' && (
+            <Link to="/customer-appointments" onClick={() => setMenuOpen(false)}>Reservar Cita</Link>
           )}
         </nav>
         <div className="App-header-right">
@@ -142,6 +148,7 @@ function App() {
         <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setCurrentUser={setCurrentUser} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/admin" element={isLoggedIn && currentUser.role === 'admin' ? <AdminDashboard /> : <Home />} />
+        <Route path="/customer-appointments" element={isLoggedIn && currentUser.role === 'customer' ? <CustomerAppointments /> : <Home />} />
         {/* Otras rutas aquí */}
       </Routes>
     </div>
