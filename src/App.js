@@ -132,7 +132,7 @@ function App() {
             <button onClick={handleLogout} className="logout-button">Logout</button>
           ) : (
             <Link to="/login">
-              <img src="./ISWproyecto/images/login.png" alt="Login" className="login-image" />
+              <img src=".\ISWproyecto\public\images\login.png" alt="Login" className="login-image" />
             </Link>
           )}
         </div>
