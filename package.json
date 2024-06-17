@@ -1,10 +1,9 @@
 {
-  "homepage": "http://galexanderg03.github.io/ISWproyecto",
+  "homepage": "https://github.com/Rocha504/YourBikeSite.git",
   "name": "proyecto",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@supabase/supabase-js": "^2.43.4",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
